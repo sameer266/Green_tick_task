@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Vulnerability Scanner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            color: #333;
+        }
+        .btn {
+            display: block;
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Web Vulnerability Scanner</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="url" placeholder="Enter URL to scan" required>
+            <button type="submit" class="btn">Scan</button>
+        </form>
+
+        {% if scan_results %}
+            <h2>Scan Results for: {{ scan_results.url }}</h2>
+
+            {% if scan_results.missing_headers %}
+                <h3>Missing Security Headers</h3>
+                <ul>
+                    {% for header in scan_results.missing_headers %}
+                        <li>{{ header }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if scan_results.outdated_software %}
+                <h3>Outdated Software Detected</h3>
+                <ul>
+                    {% for software in scan_results.outdated_software %}
+                        <li>{{ software }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if scan_results.insecure_forms %}
+                <h3>Insecure Forms Detected</h3>
+                <ul>
+                    {% for form in scan_results.insecure_forms %}
+                        <li>Form action: {{ form }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if not scan_results.missing_headers and not scan_results.outdated_software and not scan_results.insecure_forms %}
+                <p style="color: green; font-weight: bold;">No vulnerabilities found!</p>
+            {% endif %}
+        {% endif %}
+    </div>
+
+</body>
+</html>
