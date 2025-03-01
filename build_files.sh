@@ -7,8 +7,10 @@ python3.9 --version
 python3.9 -m pip install --upgrade pip
 python3.9 -m ensurepip 
 
+pip install --upgrade pip
+
 # Install dependencies from requirements.txt
-python3.9 -m pip install --no-cache-dir -r requirements.txt
+ pip install --no-cache-dir -r requirements.txt
 
 
 
